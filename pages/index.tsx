@@ -199,9 +199,9 @@ const Home = () => {
 
       {/* Hero Section with CTA */}
       <div className="bg-black border-b border-[#2a1237] shadow-md">
-        <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="w-full max-w-[1920px] mx-auto px-6 py-8">
           <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#c83ddd] to-[#8742f5]">
+            <h1 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#c83ddd] to-[#8742f5]">
               AI Agent Marketplace
             </h1>
             <div className="flex space-x-4">
@@ -223,14 +223,14 @@ const Home = () => {
       </div>
 
       {/* Featured Collections Slider */}
-      <div className="py-10 bg-[#0a0a0a]">
-        <div className="max-w-7xl mx-auto px-4 mb-6">
-          <h2 className="text-2xl font-bold text-white text-center sm:text-left">
+      <div className="py-12 bg-[#0a0a0a]">
+        <div className="w-full max-w-[1920px] mx-auto px-6 mb-8">
+          <h2 className="text-2xl md:text-3xl font-bold text-white">
             Featured Agents
           </h2>
         </div>
 
-        <div className="relative max-w-7xl mx-auto overflow-hidden">
+        <div className="relative w-full max-w-[1920px] mx-auto overflow-hidden px-6">
           {/* Left Arrow */}
           <button
             onClick={() => {
@@ -239,12 +239,12 @@ const Home = () => {
                 container.scrollBy({ left: -420, behavior: "smooth" });
               }
             }}
-            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-black/70 text-white w-10 h-10 rounded-full flex items-center justify-center border border-[#2a1237] hover:bg-[#2a1237] transition-colors"
+            className="absolute left-8 top-1/2 -translate-y-1/2 z-10 bg-black/70 text-white w-12 h-12 rounded-full flex items-center justify-center border border-[#2a1237] hover:bg-[#2a1237] transition-colors"
             aria-label="Previous"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
+              className="h-6 w-6"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -261,25 +261,25 @@ const Home = () => {
           {/* Agent Cards Container */}
           <div
             id="agent-container"
-            className="flex overflow-x-auto scroll-smooth px-8 gap-5 no-scrollbar"
+            className="flex overflow-x-auto scroll-smooth gap-6 no-scrollbar pb-4"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {featuredAgents.map((agent) => (
               <div
                 key={agent.id}
-                className="flex-none w-[280px] bg-[#121212] rounded-xl overflow-hidden hover:shadow-[0_0_15px_rgba(74,32,120,0.4)] transition-all duration-300 cursor-pointer transform hover:scale-[1.02] border border-[#2a1237]"
+                className="flex-none w-[320px] bg-[#121212] rounded-xl overflow-hidden hover:shadow-[0_0_15px_rgba(74,32,120,0.4)] transition-all duration-300 cursor-pointer transform hover:scale-[1.02] border border-[#2a1237]"
               >
-                <div className="h-[280px] relative">
+                <div className="h-[320px] relative">
                   <img
                     src={agent.imageUrl}
                     alt={agent.name}
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/95 via-black/70 to-transparent">
-                    <h3 className="text-lg font-bold text-white">
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/95 via-black/70 to-transparent">
+                    <h3 className="text-xl font-bold text-white">
                       {agent.name}
                     </h3>
-                    <div className="flex items-center space-x-2 mt-2">
+                    <div className="flex items-center space-x-2 mt-3">
                       {agent.type && (
                         <span className="text-xs font-medium text-white px-2 py-1 bg-[#2a1237] rounded-full">
                           {agent.type}
@@ -303,12 +303,12 @@ const Home = () => {
                 container.scrollBy({ left: 420, behavior: "smooth" });
               }
             }}
-            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-black/70 text-white w-10 h-10 rounded-full flex items-center justify-center border border-[#2a1237] hover:bg-[#2a1237] transition-colors"
+            className="absolute right-8 top-1/2 -translate-y-1/2 z-10 bg-black/70 text-white w-12 h-12 rounded-full flex items-center justify-center border border-[#2a1237] hover:bg-[#2a1237] transition-colors"
             aria-label="Next"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
+              className="h-6 w-6"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -325,9 +325,11 @@ const Home = () => {
       </div>
 
       {/* Top Collections Table */}
-      <div className="max-w-7xl mx-auto px-4 py-10">
+      <div className="w-full max-w-[1920px] mx-auto px-6 py-12">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-bold text-white">Top AI Agents</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-white">
+            Top AI Agents
+          </h2>
           <div className="flex space-x-2">
             <button className="px-4 py-2 text-sm bg-[#1a1a1a] text-white rounded-lg hover:bg-[#252525] transition-colors border border-[#2a1237]">
               1d
