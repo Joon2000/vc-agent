@@ -1,12 +1,19 @@
 import Link from "next/link";
 import { useState } from "react";
+import { connectWallet } from "../utils/wallet";
 
 const Navbar = () => {
   const [isConnected, setIsConnected] = useState(false);
+  const [address, setAddress] = useState<string>("");
 
-  const handleConnect = () => {
-    // Wallet connection logic here
-    setIsConnected(true);
+  const handleConnect = async () => {
+    try {
+      const { address } = await connectWallet();
+      setAddress(address);
+      setIsConnected(true);
+    } catch (error) {
+      console.error("Failed to connect wallet:", error);
+    }
   };
 
   return (
@@ -58,7 +65,9 @@ const Navbar = () => {
                 Connect Wallet
               </button>
             ) : (
-              <span className="text-[#FF0099]">Connected</span>
+              <span className="text-[#FF0099]">
+                {address.slice(0, 6)}...{address.slice(-4)}
+              </span>
             )}
           </div>
         </div>
