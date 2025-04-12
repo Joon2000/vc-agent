@@ -25,8 +25,8 @@ const Navbar = () => {
               <span className="text-white">VC Agent</span>
             </Link>
             <div className="flex items-center space-x-6">
-              <Link href="/trade" className="hover:text-gray-300">
-                Trade
+              <Link href="/invest" className="hover:text-gray-300">
+                Invest
               </Link>
               <Link href="/create" className="hover:text-gray-300">
                 Create

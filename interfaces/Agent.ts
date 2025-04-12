@@ -4,7 +4,8 @@ export interface Agent {
   description: string;
   prompt: string;
   creator: string;
-  price: number;
+  vaultAddress: string;
+  commission: string;
   imageUrl: string;
   createdAt: Date;
 }

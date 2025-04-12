@@ -1,7 +1,13 @@
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
+import { getAgents } from "../utils/agentStorage";
+import { Agent } from "../interfaces/Agent";
 
 const Home = () => {
+  const [userAgents, setUserAgents] = useState<Agent[]>([]);
+
+  // Hardcoded featured agents
   const featuredAgents = [
     {
       id: "1",
@@ -65,6 +71,15 @@ const Home = () => {
       imageUrl: "/images/research-helper.png",
     },
   ];
+
+  // Load user-created agents from localStorage on component mount
+  useEffect(() => {
+    const loadedAgents = getAgents();
+    setUserAgents(loadedAgents);
+  }, []);
+
+  // Combine featured and user-created agents
+  const allAgents = [...userAgents, ...featuredAgents];
 
   const topCollections = [
     {
@@ -189,8 +204,9 @@ const Home = () => {
     },
   ];
 
-  const topEarners = [...featuredAgents]
-    .sort((a, b) => b.revenue - a.revenue)
+  const topEarners = [...allAgents]
+    .filter((agent) => "revenue" in agent)
+    .sort((a: any, b: any) => b.revenue - a.revenue)
     .slice(0, 5);
 
   return (
@@ -228,6 +244,12 @@ const Home = () => {
           <h2 className="text-2xl md:text-3xl font-bold text-white">
             Featured Agents
           </h2>
+
+          {userAgents.length > 0 && (
+            <p className="text-gray-400 mt-2">
+              Including {userAgents.length} user-created agent(s)
+            </p>
+          )}
         </div>
 
         <div className="relative w-full max-w-[1920px] mx-auto overflow-hidden px-6">
@@ -264,35 +286,46 @@ const Home = () => {
             className="flex overflow-x-auto scroll-smooth gap-6 no-scrollbar pb-4"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
-            {featuredAgents.map((agent) => (
-              <div
-                key={agent.id}
-                className="flex-none w-[320px] bg-[#121212] rounded-xl overflow-hidden hover:shadow-[0_0_15px_rgba(74,32,120,0.4)] transition-all duration-300 cursor-pointer transform hover:scale-[1.02] border border-[#2a1237]"
-              >
-                <div className="h-[320px] relative">
-                  <img
-                    src={agent.imageUrl}
-                    alt={agent.name}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/95 via-black/70 to-transparent">
-                    <h3 className="text-xl font-bold text-white">
-                      {agent.name}
-                    </h3>
-                    <div className="flex items-center space-x-2 mt-3">
-                      {agent.type && (
-                        <span className="text-xs font-medium text-white px-2 py-1 bg-[#2a1237] rounded-full">
-                          {agent.type}
+            {allAgents.map((agent) => {
+              // Prepare data for rendering - ensure both user and featured agents have the same structure
+              const agentDisplay = {
+                id: agent.id,
+                name: agent.name,
+                imageUrl: agent.imageUrl,
+                type: "type" in agent ? agent.type : "USER CREATED",
+                chain: "chain" in agent ? agent.chain : "ETH",
+              };
+
+              return (
+                <div
+                  key={agentDisplay.id}
+                  className="flex-none w-[320px] bg-[#121212] rounded-xl overflow-hidden hover:shadow-[0_0_15px_rgba(74,32,120,0.4)] transition-all duration-300 cursor-pointer transform hover:scale-[1.02] border border-[#2a1237]"
+                >
+                  <div className="h-[320px] relative">
+                    <img
+                      src={agentDisplay.imageUrl}
+                      alt={agentDisplay.name}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/95 via-black/70 to-transparent">
+                      <h3 className="text-xl font-bold text-white">
+                        {agentDisplay.name}
+                      </h3>
+                      <div className="flex items-center space-x-2 mt-3">
+                        {agentDisplay.type && (
+                          <span className="text-xs font-medium text-white px-2 py-1 bg-[#2a1237] rounded-full">
+                            {agentDisplay.type}
+                          </span>
+                        )}
+                        <span className="text-xs font-medium px-2 py-1 bg-[#2a1237] rounded-full text-white">
+                          {agentDisplay.chain}
                         </span>
-                      )}
-                      <span className="text-xs font-medium px-2 py-1 bg-[#2a1237] rounded-full text-white">
-                        {agent.chain}
-                      </span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* Right Arrow */}

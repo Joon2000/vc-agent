@@ -1,19 +1,63 @@
 import { useState } from "react";
+import { useRouter } from "next/router";
 import Navbar from "../components/Navbar";
+import {
+  addAgent,
+  generateUniqueId,
+  fileToBase64,
+} from "../utils/agentStorage";
+import { Agent } from "../interfaces/Agent";
 
 const Create = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     prompt: "",
-    price: "",
+    commission: "",
+    vaultAddress: "",
     image: null as File | null,
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log("Form submitted:", formData);
+
+    if (!formData.image) {
+      alert("Please select an image for your agent");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // Convert the image file to base64 for storage
+      const imageBase64 = await fileToBase64(formData.image);
+
+      // Create a new agent object
+      const newAgent: Agent = {
+        id: generateUniqueId(),
+        name: formData.name,
+        description: formData.description,
+        prompt: formData.prompt,
+        commission: formData.commission,
+        creator: "Current User", // In a real app, this would be the user's wallet address
+        vaultAddress: formData.vaultAddress,
+        imageUrl: imageBase64,
+        createdAt: new Date(),
+      };
+
+      // Add the new agent to localStorage
+      addAgent(newAgent);
+
+      // Redirect to the home page
+      router.push("/");
+    } catch (error) {
+      console.error("Error creating agent:", error);
+      alert("Failed to create agent. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (
@@ -79,14 +123,34 @@ const Create = () => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Price (ETH)
+              Commission (%)
+            </label>
+            <div className="relative">
+              <input
+                type="number"
+                name="commission"
+                value={formData.commission}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 pr-8"
+                min="0"
+                max="100"
+                required
+              />
+              <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                %
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Vault Address
             </label>
             <input
-              type="number"
-              name="price"
-              value={formData.price}
+              type="string"
+              name="vaultAddress"
+              value={formData.vaultAddress}
               onChange={handleChange}
-              step="0.001"
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
@@ -107,9 +171,10 @@ const Create = () => {
 
           <button
             type="submit"
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg font-medium"
+            disabled={isSubmitting}
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg font-medium disabled:opacity-50"
           >
-            Create Agent
+            {isSubmitting ? "Creating..." : "Create Agent"}
           </button>
         </form>
       </div>
